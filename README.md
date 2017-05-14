@@ -11,9 +11,19 @@ By the end of the notebook, you will be able to
 2.  Generate and Augment data to balance dataset
 3.  Implement custom neural network architecture for a multiclass classification problem
 
+## prerequisites
+
+1. [Anaconda](https://www.continuum.io/downloads)
+2. [OpenCV](https://anaconda.org/menpo/opencv3)
+3. [Mxnet](http://mxnet.io/get_started/install.html)
 
 ## The dataset
 To learn any deep neural network, we need data. For this notebook, we use a dataset that is already stored as numpy array, as it convenient and easy.  We can also load data from any image file. We will show that later in the notebook. 
+
+The actual data set is located at  [here](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Please read this page to understand the dataset better.
+
+The pickled version of the data which we will be using is [here]
+https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip
 
 The dataset consists of 39209 training samples and 12630 testing samples representing 43 different traffic signs (stop sign, speed limit, warning sign....).
 

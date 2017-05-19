@@ -1,4 +1,4 @@
-# German traffic sign classification
+# Traffic sign classification using Mxnet
 
 In this notebook, we are going to classify german traffic sign using convolution neural network using mxnet.  The neural network will take a colored traffic sign image as input and tries to identify the meaning of the traffic sign. 
 
@@ -12,10 +12,14 @@ By the end of the notebook, you will be able to
 3.  Implement custom neural network architecture for a multiclass classification problem
 
 ## prerequisites
+Note if you using conda environment, after you activate a environment, remember to install pip-
+conda install pip. This will save you from lot of problems.
 
 1. [Anaconda](https://www.continuum.io/downloads)
-2. [OpenCV](https://anaconda.org/menpo/opencv3)
-3. [Mxnet](http://mxnet.io/get_started/install.html)
+2. OpenCV - pip install opencv-python. You can also build from source. Note - conda install opencv3.0 didnt work.
+3. [scikit learn] (http://scikit-learn.org/stable/install.html)
+4. [Mxnet](http://mxnet.io/get_started/install.html)
+5. Jupyter notebook - conda install jupyter notebook
 
 ## The dataset
 To learn any deep neural network, we need data. For this notebook, we use a dataset that is already stored as numpy array, as it convenient and easy.  We can also load data from any image file. We will show that later in the notebook. 
@@ -35,14 +39,17 @@ The code for loading the data is below
 import pickle
 
 # TODO: Fill this in based on where you saved the training and testing data
-training_file = "traffic-signs-data/train.p"
-testing_file = "traffic-signs-data/test.p"
+training_file = "traffic-data/train.p"
+validation_file =  "traffic-data/valid.p"
+
 with open(training_file, mode='rb') as f:
     train = pickle.load(f)
-with open(testing_file, mode='rb') as f:
-    test = pickle.load(f)
+
+with open(validation_file, mode='rb') as f:
+    valid = pickle.load(f)
+    
 X_train, y_train = train['features'], train['labels']
-X_test, y_test = test['features'], test['labels']
+X_valid, y_valid = valid['features'], valid['labels']
 ```
 We are loading the data from a stored numpy array. The data is split between train and test set.  The train set contains the features of 39209 images of size 3*32 with 3 (R,G,B) channels . Hence the numpy array dimension is of 39209 * 32 X 32 X 3 array. So X_train is of dimension 39209 * 32 X 32 X 3. The y_train is of dimesion 39209*1 and contains a number between 0-43 for each image.
 
@@ -79,6 +86,9 @@ The below code will help to visualize the image along with the labels(images cla
 # Data exploration visualization
 # This gives better understanding of the data
 
+# Data exploration visualization
+# This gives better understanding of the data
+
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 # Visualizations will be shown in the notebook.
@@ -95,7 +105,7 @@ def get_images_to_plot(images, labels):
     return selected_image,idx
  
 # function to plot the images in a grid    
-def plot_images(selected_image,row=5,col=10,idx = None):     
+def plot_images(selected_image,y_val,row=5,col=10,idx = None):     
     count =0;
     f, axarr = plt.subplots(row, col,figsize=(50, 50))
    
@@ -104,11 +114,14 @@ def plot_images(selected_image,row=5,col=10,idx = None):
                 if(count < len(selected_image)):
                     axarr[i,j].imshow(selected_image[count])
                     if(idx != None):
-                        axarr[i,j].set_title(traffic_labels_dict[y_train[idx[count]]], fontsize=20)
+                        axarr[i,j].set_title(traffic_labels_dict[y_val[idx[count]]], fontsize=20)
                 axarr[i,j].axis('off')
                 count = count + 1
+           
 selected_image,idx = get_images_to_plot(X_train,y_train)
-plot_images(selected_image,row=10,col=4,idx=idx)
+plot_images(selected_image,row=10,col=4,idx=idx,y_val=y_train)
+
+![Alt text](output_images/vis.png?raw=true "traffic sign visualization")
 
 ## The data augmentation
 ```
@@ -152,7 +165,7 @@ def get_additional(count, label, X_train, y_train):
     X_mqp = X_train[selected[0]]
     X_mqp = X_mqp[np.newaxis, ...]
     while m < (len(selected)):
-        aa =  X_train[selected[m]] # random_trans(X_train[selected[m]],20)
+        aa =  random_trans(X_train[selected[m]],20)
         # ignore the first element, since it already selected
         X_mqp = np.vstack([X_mqp, aa[np.newaxis, ...]])
         if (counter >= count):
@@ -255,40 +268,116 @@ mynet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 ## Tweaking training data.
 A neural network takes a lot of time and memory to train. In order to train neural network efficiently, we split a dataset into batches that fit into memory easily, so we split into batches of 64. 
 
-Also, we train the normalize the value of image color (0-255) to the range of 0 to 1. This helps the learning algorithm to converge faster.
+Also, we train the normalize the value of image color (0-255) to the range of 0 to 1. This helps the learning algorithm to converge faster. You can read about the reasons to noramlise the input online
 
 Below is the 
 ```python
 
 batch_size = 64
-X_train_set = X_train_set.astype('float32')
-X_train_set[:] = X_train_set[:] / 255.0;
+X_train_set_as_float = X_train_reshape.astype('float32')
+X_train_set_norm = X_train_set_as_float[:] / 255.0;
 
-X_validation_set = X_validation_set.astype('float32')
-X_validation_set[:] = X_validation_set[:] / 255.0 ;
-train_iter =mx.io.NDArrayIter(X_train_set, Y_train_set, batch_size, shuffle=True)
-val_iter = mx.io.NDArrayIter(X_validation_set, Y_validation_set, batch_size)
-for batch in train_iter:
-    print(batch.data[0].shape)
-    break;
+X_validation_set_as_float = X_valid_reshape.astype('float32')
+X_validation_set_norm = X_validation_set_as_float[:] / 255.0 ;
 
-print(X_train_set.shape)
-print(X_validation_set.shape)
+
+train_iter =mx.io.NDArrayIter(X_train_set_as_float, y_train_extra, batch_size, shuffle=True)
+val_iter = mx.io.NDArrayIter(X_validation_set_as_float, y_valid, batch_size,shuffle=True)
+
+
+print("train set : ", X_train_set_norm.shape)
+print("validation set : ", X_validation_set_norm.shape)
+
+
+print("y train set : ", y_train_extra.shape)
+print("y validation set :", y_valid.shape)
 ```
 
 ## Lets train the network
-We are training the network using GPU since its faster. We are training the network for 5 epoch "num_epoch = 5".  A single pass through the training set is  called as one epoch. We are training the neural network for five epoch
+We are training the network using GPU since its faster. We are training the network for 10 epoch "num_epoch = 10".  A single pass through the training set is  called as one epoch. We also prediocally store the trained model in a json file. We also measure the 
+train and validation accuracy. For windows users, use only cpu. Mxnet has bug in gpu implemention for windows.
 
 Below is the code 
 ```python
-model = mx.model.FeedForward(
-    ctx = mx.gpu(0),     # use GPU 0 for training, others are same as before
-    symbol = mynet,       
-    num_epoch = 5, 
-    optimizer= adam)
+#create adam optimiser
+adam = mx.optimizer.create('adam')
+
+#checking point (saving the model). Make sure there is folder named models exist
+model_prefix = 'models/chkpt'
+checkpoint = mx.callback.do_checkpoint(model_prefix)
+                                       
+#loading the module API. Previously mxnet used feedforward (deprecated)                                       
+model =  mx.mod.Module(
+    context = mx.gpu(0),     # use GPU 0 for training if you dont have gpu use mx.cpu(). 
+    symbol = mynet,			 
+    data_names=['data']
+   )
+                                       
+#actually fit the model for 10 epochs. Can take 5 minutes                                      
 model.fit(
-    X=train_iter,  
+    train_iter,
     eval_data=val_iter, 
-    batch_end_callback = mx.callback.Speedometer(batch_size, 64)
+    batch_end_callback = mx.callback.Speedometer(batch_size, 64),
+    num_epoch = 10, 
+    eval_metric='acc', # evaluation metric is accuracy. 
+    optimizer = adam,
+    epoch_end_callback=checkpoint
 )
+```
+
+## load the trained model from file system
+Since we have check pointed the model during training, we can load any epoch and check its classification power. Below we are loading the 10 epoch. We also set binidng in the model loaded with training false, since we are using this network for testing and not training. We also reduce the batch size of input from 64 to 1 (data_shapes=[('data', (1,3,32,32))) , since we are going to test it on a single image. You can use the same technique to load any other pretrained machine learning model.
+
+```python
+#load the model from the checkpoint , we are loading the 10 epoch
+sym, arg_params, aux_params = mx.model.load_checkpoint(model_prefix, 10)
+
+# assign the loaded parameters to the module
+mod = mx.mod.Module(symbol=sym, context=mx.cpu())
+mod.bind(for_training=False, data_shapes=[('data', (1,3,32,32))])
+mod.set_params(arg_params, aux_params)
+```
+
+## prediction
+We are using the load model for prediction. We convert the some traffic sign image(turn-left-ahead2.jpg) and try to predict their label. Below is the image I downloaded from google
+
+![Alt text](output_images/turn-left-ahead2.jpg?raw=true "test image")
+
+
+```python
+#Preidcition for random traffic sign from internet
+from collections import namedtuple
+Batch = namedtuple('Batch', ['data'])
+
+#load the image , resizes it to 32*32 and converts it to 1*3*32*32 
+def get_image(url, show=False):
+    # download and show the image
+    img =cv2.imread(url)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    if img is None:
+         return None
+    if show:
+         plt.imshow(img)
+         plt.axis('off')
+    # convert into format (batch, RGB, width, height)
+    img = cv2.resize(img, (32, 32))
+    img = np.swapaxes(img, 0, 2)
+    img = np.swapaxes(img, 1, 2) #swaps axis to make it 3*32*32
+    #plt.imshow(img.transpose(1,2,0))
+    #plt.axis('off')
+    img = img[np.newaxis, :] # Add a extra axis to the image so it becomes 1*3*32*32
+    return img
+
+def predict(url):
+    img = get_image(url, show=True)
+    # compute the predict probabilities
+    mod.forward(Batch([mx.nd.array(img)]))
+    prob = mod.get_outputs()[0].asnumpy()
+    # print the top-5
+    prob = np.squeeze(prob)
+    prob = np.argsort(prob)[::-1]
+    for i in prob[0:5]:
+        print('class=%s' %(traffic_labels_dict[i]))
+
+predict('traffic-data/turn-left-ahead2.jpg',)
 ```

@@ -1,2 +1,7 @@
 traffic-signs-data
 .ipynb_checkpoints
+handwritten-digits
+.idea
+test.py
+models
+traffic-data

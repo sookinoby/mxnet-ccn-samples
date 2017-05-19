@@ -120,8 +120,9 @@ def plot_images(selected_image,y_val,row=5,col=10,idx = None):
            
 selected_image,idx = get_images_to_plot(X_train,y_train)
 plot_images(selected_image,row=10,col=4,idx=idx,y_val=y_train)
-
-![Alt text](output_images/vis.png?raw=true "traffic sign visualization")
+```
+The visualized traffic sign with their labels
+![Alt text](images/vis.png?raw=true "traffic sign visualization")
 
 ## The data augmentation
 ```
@@ -341,7 +342,7 @@ mod.set_params(arg_params, aux_params)
 ## prediction
 We are using the load model for prediction. We convert the some traffic sign image(turn-left-ahead2.jpg) and try to predict their label. Below is the image I downloaded from google
 
-![Alt text](output_images/turn-left-ahead2.jpg?raw=true "test image")
+![Alt text](images/turn-left-ahead2.jpg?raw=true "test image")
 
 
 ```python

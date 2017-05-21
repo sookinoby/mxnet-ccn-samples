@@ -1,39 +1,37 @@
 # Traffic sign classification using Mxnet
 
-In this notebook, we are going to classify german traffic sign using convolution neural network using mxnet.  The neural network will take a colored traffic sign image as input and tries to identify the meaning of the traffic sign. 
+In this notebook, we are going to classify German traffic signs using convolution neural network which employs MXNet. The neural network takes a coloured traffic sign image as input and tries to identify the meaning of the traffic sign.
 
-Although there are many deep learning frameworks (TensorFlow, Keras, Torch, Caffee), mxnet is gaining popularity due to its scalability across multiple GPU.
+Although there are many deep learning frameworks (TensorFlow, Keras, Torch, Caffee), MXNet is gaining popularity due to its scalability across multiple GPU.
+This notebook expects you to have a basic understanding of convolution operation, neural network, activation units, gradient decent, numpy and OpenCV.
+By the end of the notebook, you will be able to
 
-This notebook expects you to have a basic understanding of convolution operation, neural network, activation units, gradient decent, numpy and OpenCV. 
-
-By the end of the notebook, you will be able to 
 1.  Prepare dataset for training neural network
-2.  Generate and Augment data to balance dataset
+2.  Generate and augment data to balance dataset
 3.  Implement custom neural network architecture for a multiclass classification problem
 
 ## prerequisites
-Note if you using conda environment, after you activate a environment, remember to install pip-
-conda install pip. This will save you from lot of problems.
+Note that if you are using conda environment, after you activate an environment, remember to install pip-conda install pip. This will save you from lot of problems.
 
 1. [Anaconda](https://www.continuum.io/downloads)
 2. OpenCV - pip install opencv-python. You can also build from source. Note - conda install opencv3.0 didnt work.
 3. [scikit learn] (http://scikit-learn.org/stable/install.html)
-4. [Mxnet](http://mxnet.io/get_started/install.html)
+4. [MXNet](http://mxnet.io/get_started/install.html)
 5. Jupyter notebook - conda install jupyter notebook
 
 ## The dataset
-To learn any deep neural network, we need data. For this notebook, we use a dataset that is already stored as numpy array, as it convenient and easy.  We can also load data from any image file. We will show that later in the notebook. 
+To learn any deep neural network, we need data. For this notebook, we use a dataset that is already stored as a numpy array, as it is convenient and easy. You can also load data from any image file. We will show that later in the notebook.
 
-The actual data set is located at  [here](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Please read this page to understand the dataset better.
+The actual data set is located [here](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Please read this page to understand the dataset better.
 
 The pickled version of the data which we will be using is [here]
-https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip
+(https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip)
 
 The dataset consists of 39209 training samples and 12630 testing samples representing 43 different traffic signs (stop sign, speed limit, warning sign....).
 
-Each data in the dataset is 32*32 size with three channel(RGB) and belongs to a particular image class. The image class is a number between 0 to 43.  The actual name of the class is given 'signnames.csv'. The 'signnames.csv' of CSV contains the mapping between the sign name and the class numbers. 
+Each data in the dataset is 32*32 size with three channel (RGB) and belongs to a particular image class. The image class is a number between 0 and 43. The actual name of the class is given 'signnames.csv'. The 'signnames.csv' of CSV contains the mapping between the sign name and the class numbers.
 
-The code for loading the data is below
+The code for loading the data is below:
 
 ```python
 import pickle
@@ -51,7 +49,7 @@ with open(validation_file, mode='rb') as f:
 X_train, y_train = train['features'], train['labels']
 X_valid, y_valid = valid['features'], valid['labels']
 ```
-We are loading the data from a stored numpy array. The data is split between train and test set.  The train set contains the features of 39209 images of size 3*32 with 3 (R,G,B) channels . Hence the numpy array dimension is of 39209 * 32 X 32 X 3 array. So X_train is of dimension 39209 * 32 X 32 X 3. The y_train is of dimesion 39209*1 and contains a number between 0-43 for each image.
+We are loading the data from a stored numpy array. The data is split between train and test set. The train set contains the features of 39209 images of size 332 with 3 (R,G,B) channels . Hence the numpy array dimension is of 39209 * 32 X 32 X 3 array. So X_train is of dimension 39209 * 32 X 32 X 3. The y_train is of dimesion 392091 and contains a number between 0-43 for each image.
 
 Next, we load the file that maps each image class to actual names.
 ```python
@@ -73,14 +71,14 @@ def read_csv_and_parse():
 traffic_labels_dict = read_csv_and_parse()
 print(traffic_labels_dict)
 ```
-we can see there are 43 labels for the 43 image classes.  For example,
-0 image class is actually speed limit(20 km/h).
+We can see there are 43 labels for the 43 image classes. For example,
+0 image class is actually the speed limit (20 km/h).
 
 ```python
 {0: 'Speed limit (20km/h)', 1: 'Speed limit (30km/h)', 2: 'Speed limit (50km/h)', 3: 'Speed limit (60km/h)', 4: 'Speed limit (70km/h)', 5: 'Speed limit (80km/h)', 6: 'End of speed limit (80km/h)', 7: 'Speed limit (100km/h)', 8: 'Speed limit (120km/h)', 9: 'No passing', 10: 'No passing for vehicles over 3.5 metric tons', 11: 'Right-of-way at the next intersection', 12: 'Priority road', 13: 'Yield', 14: 'Stop', 15: 'No vehicles', 16: 'Vehicles over 3.5 metric tons prohibited', 17: 'No entry', 18: 'General caution', 19: 'Dangerous curve to the left', 20: 'Dangerous curve to the right', 21: 'Double curve', 22: 'Bumpy road', 23: 'Slippery road', 24: 'Road narrows on the right', 25: 'Road work', 26: 'Traffic signals', 27: 'Pedestrians', 28: 'Children crossing', 29: 'Bicycles crossing', 30: 'Beware of ice/snow', 31: 'Wild animals crossing', 32: 'End of all speed and passing limits', 33: 'Turn right ahead', 34: 'Turn left ahead', 35: 'Ahead only', 36: 'Go straight or right', 37: 'Go straight or left', 38: 'Keep right', 39: 'Keep left', 40: 'Roundabout mandatory', 41: 'End of no passing', 42: 'End of no passing by vehicles over 3.5 metric tons'}
 ```
  ## Visualization
-The below code will help to visualize the image along with the labels(images classes)
+The below code will help visualize the image along with the labels (images classes)
 
 ```python
 # Data exploration visualization
@@ -121,7 +119,7 @@ def plot_images(selected_image,y_val,row=5,col=10,idx = None):
 selected_image,idx = get_images_to_plot(X_train,y_train)
 plot_images(selected_image,row=10,col=4,idx=idx,y_val=y_train)
 ```
-The visualized traffic sign with their labels
+The visualized traffic signs with their labels:
 ![Alt text](images/vis.png?raw=true "traffic sign visualization")
 
 ## The data augmentation
@@ -139,10 +137,9 @@ print(np.bincount(y_train))
   450  780  240  689  420 1200  390  210 2070  300  360  240  240]
 ```
 
-There is not an equal representation of the images in the training set. The number of images of the class label 0 ('speed limit 20 km/h)' is 210 and the number of images of the class label 1 ('speed limit 30 km/h)' is 2220. This classes will cause neural network to favor class label 1 compared to class label 0.
+There is unequal representation of the images in the training set. The number of images of the class label 0 ('speed limit 20 km/h)' is 210 and the number of images of the class label 1 ('speed limit 30 km/h)' is 2220. These classes will cause neural network to favour class label 1 as compared to class label 0.
 
-In order to balance the dataset, we need to generate additional augmented data. We can augment data with various parameters, but for sake of simplicity, we are going to translate(move the image by random value in x, y dimensions) the image. Below is the code for data augmentation. 
-
+In order to balance the dataset, we need to generate additional augmented data. We can augment data with various parameters, but for the sake of simplicity, we are going to translate (move the image by random value in x, y dimensions) the image. Below is the code for data augmentation:
 ```python
 def random_trans(image, trans_range):
     rows,cols,_ = image.shape;
@@ -152,7 +149,7 @@ def random_trans(image, trans_range):
     image_tr = cv2.warpAffine(image, Trans_M, (cols, rows))
     return image_tr
 ```
-The line Trans_M = np.float32([[1, 0, tr_x], [0, 1, tr_y]]) forms the translation matrix which is used to transalte the image"
+The line Trans_M = np.float32([[1, 0, tr_x], [0, 1, tr_y]]) forms the translation matrix which is used to translate the image.
 
 Below is the code for balancing the dataset
 
@@ -195,8 +192,8 @@ print(X_train_extra.shape)
 ```
 ## Prepared dataset
 
-X_train_extra and Y_train_extra  make the actual training dataset. For sake of simplicity, we will use the testing set as validation set and we will use some real images for the purpose of testing. You can also generate a validation set by splitting the training data into train and validation set.
-Below is the python code for doing it.
+X_train_extra and Y_train_extra make the actual training dataset. For the sake of simplicity, we will use the testing set as the validation set and we will use some real images for the purpose of testing. You can also generate a validation set by splitting the training data into train and validation set. 
+Below is the python code for doing it:
 
 ```
 #split the train-set as validation and test set
@@ -205,7 +202,7 @@ X_train_set,X_validation_set,Y_train_set,Y_validation_set = train_test_split( X_
 ```
 ## The actual training
 
-Now, enough of preparing out dataset. Lets actually code the neural network up. The neural code is actually small and simple , thanks to mxnet symbol api. 
+Now, enough of preparing our dataset. Let’s actually code the neural network up. The neural code is actually small and simple, thanks to MXNet symbol api.
 
 ```python
 data = mx.symbol.Variable('data')
@@ -267,11 +264,11 @@ mynet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 ```
 
 ## Tweaking training data.
-A neural network takes a lot of time and memory to train. In order to train neural network efficiently, we split a dataset into batches that fit into memory easily, so we split into batches of 64. 
+A neural network takes a lot of time and memory to train. In order to train neural network efficiently, we split a dataset into batches that fit into memory easily, so we split into batches of 64.
 
-Also, we train the normalize the value of image color (0-255) to the range of 0 to 1. This helps the learning algorithm to converge faster. You can read about the reasons to noramlise the input online
+Also, we train to normalize the value of the image colour (0-255) to the range of 0 to 1. This helps the learning algorithm to converge faster. You can read about the reasons to normalise the input online
 
-Below is the 
+Below is the code to normalize the value of the image colour. 
 ```python
 
 batch_size = 64
@@ -295,10 +292,10 @@ print("y validation set :", y_valid.shape)
 ```
 
 ## Lets train the network
-We are training the network using GPU since its faster. We are training the network for 10 epoch "num_epoch = 10".  A single pass through the training set is  called as one epoch. We also prediocally store the trained model in a json file. We also measure the 
-train and validation accuracy. For windows users, use only cpu. Mxnet has bug in gpu implemention for windows.
+We are training the network using GPU since it’s faster. We are training the network for 10 epoch "num_epoch = 10". A single pass through the training set is called as one epoch. We also periodically store the trained model in a json file, and measure the
+train and validation accuracy. For windows users, use only CPU. Mxnet has bug in GPU implemention for windows.
 
-Below is the code 
+Below is the code: 
 ```python
 #create adam optimiser
 adam = mx.optimizer.create('adam')
@@ -327,7 +324,7 @@ model.fit(
 ```
 
 ## load the trained model from file system
-Since we have check pointed the model during training, we can load any epoch and check its classification power. Below we are loading the 10 epoch. We also set binidng in the model loaded with training false, since we are using this network for testing and not training. We also reduce the batch size of input from 64 to 1 (data_shapes=[('data', (1,3,32,32))) , since we are going to test it on a single image. You can use the same technique to load any other pretrained machine learning model.
+Since we have check pointed the model during training, we can load any epoch and check its classification power. Below, we are loading the 10 epoch. We also set binding in the model loaded with training false, since we are using this network for testing and not training. Furthermore, we reduced the batch size of input from 64 to 1 (data_shapes=[('data', (1,3,32,32))) , since we are going to test it on a single image. You can use the same technique to load any other pre-trained machine learning model.
 
 ```python
 #load the model from the checkpoint , we are loading the 10 epoch
@@ -340,7 +337,7 @@ mod.set_params(arg_params, aux_params)
 ```
 
 ## prediction
-We are using the load model for prediction. We convert the some traffic sign image(turn-left-ahead2.jpg) and try to predict their label. Below is the image I downloaded from google
+We are using the load model for prediction. We convert a traffic sign image (turn-left-ahead2.jpg) and try to predict their label. Below is the image I downloaded from Google.
 
 ![Alt text](images/turn-left-ahead2.jpg?raw=true "test image")
 

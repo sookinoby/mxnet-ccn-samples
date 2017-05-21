@@ -336,14 +336,14 @@ mod.bind(for_training=False, data_shapes=[('data', (1,3,32,32))])
 mod.set_params(arg_params, aux_params)
 ```
 
-## prediction
+## Prediction
 We are using the load model for prediction. We convert a traffic sign image (turn-left-ahead2.jpg) and try to predict their label. Below is the image I downloaded from Google.
 
 ![Alt text](images/turn-left-ahead2.jpg?raw=true "test image")
 
 
 ```python
-#Preidcition for random traffic sign from internet
+#Prediction for random traffic sign from internet
 from collections import namedtuple
 Batch = namedtuple('Batch', ['data'])
 

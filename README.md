@@ -194,7 +194,7 @@ print(X_train_extra.shape)
 ```
 ## Prepared dataset
 
-X_train_extra and Y_train_extra make the actual training dataset. For the sake of simplicity, we use the testing set as the validation set, and we'll employ real images for the purpose of testing. 
+X_train_extra and Y_train_extra make the actual training dataset. we'll employ real images for the purpose of testing. 
 
 You can also generate a validation set by splitting the training data into train and validation set. Here's the Python code for that:
 
@@ -203,6 +203,21 @@ You can also generate a validation set by splitting the training data into train
 from sklearn.model_selection import train_test_split
 X_train_set,X_validation_set,Y_train_set,Y_validation_set = train_test_split( X_train_extra, Y_train_extra, test_size=0.02, random_state=42)
 ```
+The image dimesioning order of mxnet is similar to theano and uses the format 3*32*32. The number of channels is the first dimension, followed by height and width of the image. Tensor flow uses image dimension ordering of 32*32*3, i.e the color channels comes last. Refer (this)[https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean] for more information. Below is the helper function to convert image ordering to mxnet format to 3*32*32 from 32*32*3.
+
+```python
+#change the image dimensioning from 32 X 32 X 3 to 3 X 32 X 32 for train
+X_train_reshape = np.transpose(X_train_extra, (0, 3, 1, 2))
+plt.imshow(X_train_reshape[0].transpose((1,2,0)))
+print(X_train_reshape.shape)
+
+
+#change the image dimensioning from 32 X 32 X 3 to 3 X 32 X 32 for validation
+X_valid_reshape = np.transpose(X_valid, (0, 3, 1, 2))
+plt.imshow(X_valid_reshape[1].transpose((1,2,0)))
+print(X_valid_reshape.shape)
+```
+
 ## The actual training
 
 Now, enough of preparing our dataset. Let's actually code the neural network up. The neural code is actually small and simple, thanks to MXNet symbol api:

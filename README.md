@@ -24,8 +24,7 @@ In order to learn about any deep neural network, we need data. For this notebook
 
 The actual data set is located [here](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Please read this page to understand the dataset better.
 
-The pickled version of the data that we will be using is [here]
-(https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip)
+The pickled version of the data that we will be using is [here](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip)
 
 The dataset consists of 39,209 training samples and 12,630 testing samples, representing 43 different traffic signs (such as a stop sign, speed limit, warning sign, and so on).
 

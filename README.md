@@ -17,14 +17,14 @@ Note that if you are using conda environment, remember to install pip inside con
 4. [MXNet](http://mxnet.io/get_started/install.html)
 5. Jupyter notebook - conda install jupyter notebook
 
-Mxnet, GPU version has a problem in windows. I have asked for clarification in [mxnet github] page(https://github.com/dmlc/mxnet/issues/6057). Mxnet CPU version works fine in windows.
+Mxnet, GPU version has a problem in windows. I have asked for clarification in [mxnet github](https://github.com/dmlc/mxnet/issues/6057) page. Mxnet CPU version works fine in windows.
 
 ## The dataset
 In order to learn about any deep neural network, we need data. For this notebook, we use a dataset already stored as a NumPy array. You can also load data from any image file. We'll show that process later in the notebook.
 
 The actual data set is located [here](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Please read this page to understand the dataset better.
 
-The pickled version of the data that we will be using is [here]:
+The pickled version of the data that we will be using is [here]
 (https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip)
 
 The dataset consists of 39,209 training samples and 12,630 testing samples, representing 43 different traffic signs (such as a stop sign, speed limit, warning sign, and so on).
@@ -203,7 +203,7 @@ You can also generate a validation set by splitting the training data into train
 from sklearn.model_selection import train_test_split
 X_train_set,X_validation_set,Y_train_set,Y_validation_set = train_test_split( X_train_extra, Y_train_extra, test_size=0.02, random_state=42)
 ```
-The image dimesioning order of mxnet is similar to theano and uses the format 3*32*32. The number of channels is the first dimension, followed by height and width of the image. Tensor flow uses image dimension ordering of 32*32*3, i.e the color channels comes last. Refer (this)[https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean] for more information. Below is the helper function to convert image ordering to mxnet format to 3*32*32 from 32*32*3.
+The image dimesioning order of mxnet is similar to theano and uses the format 3*32*32. The number of channels is the first dimension, followed by height and width of the image. Tensor flow uses image dimension ordering of 32*32*3, i.e the color channels comes last. Refer [this](https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean) for more information. Below is the helper function to convert image ordering to mxnet format to 3*32*32 from 32*32*3.
 
 ```python
 #change the image dimensioning from 32 X 32 X 3 to 3 X 32 X 32 for train

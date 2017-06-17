@@ -9,13 +9,15 @@ In order to work through this notebook, we expect you'll have a basic understand
 3.  Implement custom neural network architecture for a multiclass classification problem.
 
 ## prerequisites
-Note that if you are using conda environment, remember to install pip-conda install pip after you activate an environment. This step will save you from lot of problems.
+Note that if you are using conda environment, remember to install pip inside conda. Type conda install pip after you activate an environment. This step will save you from lot of problems.
 
 1. [Anaconda](https://www.continuum.io/downloads)
 2. OpenCV - pip install opencv-python. You can also build from source. (Note: conda install opencv3.0 does not work.)
 3. [scikit learn] (http://scikit-learn.org/stable/install.html).
 4. [MXNet](http://mxnet.io/get_started/install.html)
 5. Jupyter notebook - conda install jupyter notebook
+
+Mxnet, GPU version has a problem in windows. I have asked for clarification in [mxnet github] page(https://github.com/dmlc/mxnet/issues/6057). Mxnet CPU version works fine in windows.
 
 ## The dataset
 In order to learn about any deep neural network, we need data. For this notebook, we use a dataset already stored as a NumPy array. You can also load data from any image file. We'll show that process later in the notebook.
@@ -47,7 +49,7 @@ with open(validation_file, mode='rb') as f:
 X_train, y_train = train['features'], train['labels']
 X_valid, y_valid = valid['features'], valid['labels']
 ```
-We are loading the data from a stored NumPy array. In this array, the data is split between train and test set. The train set contains the features of 39209 images of size 332 with 3 (R,G,B) channels. As a result, the NumPy array dimension is of 39209 * 32 X 32 X 3 array. 
+We are loading the data from a stored NumPy array. In this array, the data is split between train, validation and test set. The train set contains the features of 39209 images of size 332 with 3 (R,G,B) channels. As a result, the NumPy array dimension is of 39209 * 32 X 32 X 3 array. We will only be using train set and validation set in this notebook. We will use real images from interenet to test our model.
 
 So X_train is of dimension 39209 * 32 X 32 X 3. The y_train is of dimesion 392091 and contains a number between 0-43 for each image.
 
@@ -256,7 +258,7 @@ A neural network is like a Legos block: we repeat some of the layers (to increas
 fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=500, name="fc1")
 ```
 
-This layer is followed again a fully connected layer with 43 neurons, each neuron representing a class of the image. Since the output from the neuron is real valued, but our classification requires a single integer as output, we use another activation function. This step makes the output of one particular out of 43 neurons as 1 and remaining 1 neuron as zero.
+This layer is followed again a fully connected layer with 43 neurons, each neuron representing a class of the image. Since the output from the neuron is real valued, but our classification requires a single integer as output, we use another activation function. This step makes the output of one particular neuron (out of 43 neurons) as 1 and remaining neurons as zero.
 
 ```python
 fc2 = mx.sym.FullyConnected(data=relu3, num_hidden=43,name="final_fc")
@@ -327,7 +329,7 @@ model.fit(
 ```
 
 ## Loading the trained model from the filesystem
-Since we have check-pointed the model during training, we can load any epoch and check its classification power. In the example below, we load the 10 epoch. We also set the binding in the model loaded to training false, since we are using this network for testing, not training. Furthermore, we reduce the batch size of input from 64 to 1 (data_shapes=[('data', (1,3,32,32))), since we are going to test it on a single image. You can use the same technique to load any other pre-trained machine learning model.
+Since we have check-pointed the model during training, we can load any epoch and check its classification power. In the example below, we load the 10th epoch. We also set the binding in the model loaded to training false, since we are using this network for testing, not training. Furthermore, we reduce the batch size of input from 64 to 1 (data_shapes=[('data', (1,3,32,32))), since we are going to test it on a single image. You can use the same technique to load any other pre-trained machine learning model.
 
 ```python
 #load the model from the checkpoint , we are loading the 10 epoch
@@ -340,7 +342,7 @@ mod.set_params(arg_params, aux_params)
 ```
 
 ## Prediction
-We are using the load model for prediction. We convert a traffic sign image (turn-left-ahead2.jpg) and try to predict their label. Here's is the image I downloaded from Google.
+We are using the load model for prediction. We convert a traffic sign image (turn-left-ahead2.jpg) into 32*32*3 (32*32 dimension image with 3 channels) and try to predict their label. Here's is the image I downloaded from Google.
 
 ![Alt text](images/turn-left-ahead2.jpg?raw=true "test image")
 

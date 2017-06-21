@@ -1,4 +1,4 @@
-# Traffic sign classification using Mxnet
+# Classifying traffic signs with MXNet: An introduction to customizing a neural network
 
 Although there are many deep learning frameworks, including TensorFlow, Keras, Torch, and Caffee, MXNet in particular is gaining popularity due to its scalability across multiple GPUs. In this notebook, we classify German traffic signs using convolution neural network, which employs MXNet. The neural network takes a colored traffic sign image as input, and tries to identify the meaning of the traffic sign.
 
@@ -8,8 +8,10 @@ In order to work through this notebook, we expect you'll have a basic understand
 2.  Generate and augment data to balance the dataset; and
 3.  Implement custom neural network architecture for a multiclass classification problem.
 
-## prerequisites
-Note that if you are using conda environment, remember to install pip inside conda. Type conda install pip after you activate an environment. This step will save you from lot of problems.
+## Prerequisites
+Note that if you are using a conda environment, remember to install pip inside conda. Type conda install pip after you activate an environment. This step will save you from lot of problems.
+
+Here's how to get set up: **NOTE FROM CT: This list of instructions needs to be fleshed out to be sentences: "First, get Anaconda here" and so on.**
 
 1. [Anaconda](https://www.continuum.io/downloads)
 2. OpenCV - pip install opencv-python. You can also build from source. (Note: conda install opencv3.0 does not work.)
@@ -17,18 +19,18 @@ Note that if you are using conda environment, remember to install pip inside con
 4. [MXNet](http://mxnet.io/get_started/install.html)
 5. Jupyter notebook - conda install jupyter notebook
 
-Mxnet, GPU version has a problem in windows. I have asked for clarification in [mxnet github](https://github.com/dmlc/mxnet/issues/6057) page. Mxnet CPU version works fine in windows.
+Please note: the MXNet GPU version has a problem in Windows. I have asked for clarification in [mxnet github](https://github.com/dmlc/mxnet/issues/6057) page. The MXNet CPU version works fine in Windows.
 
 ## The dataset
 In order to learn about any deep neural network, we need data. For this notebook, we use a dataset already stored as a NumPy array. You can also load data from any image file. We'll show that process later in the notebook.
 
-The actual data set is located [here](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Please read this page to understand the dataset better.
+The actual dataset is located [here](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Please read this page to understand the dataset better.
 
 The pickled version of the data that we will be using is [here](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/5898cd6f_traffic-signs-data/traffic-signs-data.zip)
 
 The dataset consists of 39,209 training samples and 12,630 testing samples, representing 43 different traffic signs (such as a stop sign, speed limit, warning sign, and so on).
 
-Each data in the dataset is 32*32 size with three channel (RGB) and belongs to a particular image class. The image class is a number between 0 and 43. The actual name of the class is given 'signnames.csv'. The 'signnames.csv' of CSV contains the mapping between the sign name and the class numbers.
+Each data in the dataset is 32*32 size with three channel (RGB) and belongs to a particular image class. The image class is a number between 0 and 43. The actual name of the class is given 'signnames.csv'. The 'signnames.csv' of CSV contains the mapping between the sign name and the class numbers. **NOTE FROM CT: Why is this in italic? Remove italic? Or is this a quote? If so, please give the citation info.**
 
 Here's the code for loading the data:
 
@@ -399,7 +401,8 @@ def predict(url):
 predict('traffic-data/turn-left-ahead2.jpg',)
 ```
 
-##Conclusion
-In this notebook we saw how to use MXNet to perform a multi-class image classification. We also learned techniques to pre-process image data. We stored the trained neural network on the disk and later loaded the pre-trained neural netwrok model to classify images from the web.This model can be deployed as web services. The techniques we learned can be used to on  other image data for the purpose of classification and extended for detecting objects in a image.
+## Conclusion
 
-In the next note book, we will develop a state of the art sentiment classifier using MXnet. Again, the techniques learnt in next notebook can be extended to other Natural language processing task. 
+In this notebook, we explored how to use MXNet to perform a multi-class image classification. We also learned techniques to pre-process image data. We stored the trained neural network on the disk, and later loaded the pre-trained neural netwrok model to classify images from the web. This model can be deployed as web services. The techniques demonstrated can be used on other image data for the purpose of classification, and extended for detecting objects in a image.
+
+In the next notebook, we'll develop a state of the art sentiment classifier using MXNet. As in this example, the techniques explained in next notebook can be extended to other natural language-processing tasks. 

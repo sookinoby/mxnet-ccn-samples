@@ -398,3 +398,8 @@ def predict(url):
 
 predict('traffic-data/turn-left-ahead2.jpg',)
 ```
+
+##Conclusion
+In this notebook we saw how to use MXNet to perform a multi-class image classification. We also learned techniques to pre-process image data. We stored the trained neural network on the disk and later loaded the pre-trained neural netwrok model to classify images from the web.This model can be deployed as web services. The techniques we learned can be used to on  other image data for the purpose of classification and extended for detecting objects in a image.
+
+In the next note book, we will develop a state of the art sentiment classifier using MXnet. Again, the techniques learnt in next notebook can be extended to other Natural language processing task. 

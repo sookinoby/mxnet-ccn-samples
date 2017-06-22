@@ -2,7 +2,9 @@
 
 Although there are many deep learning frameworks, including TensorFlow, Keras, Torch, and Caffee, MXNet in particular is gaining popularity due to its scalability across multiple GPUs. In this notebook, we classify German traffic signs using convolution neural network, which employs MXNet. The neural network takes a colored traffic sign image as input, and tries to identify the meaning of the traffic sign.
 
-In order to work through this notebook, we expect you'll have a basic understanding of convolution operation, neural network, activation units, gradient decent, NumPy, and OpenCV. By the end of the notebook, you will be able to:
+In order to work through this notebook, we expect you'll have a very basic understanding of convolution operation, neural network, activation units, gradient decent, NumPy, and OpenCV. The prerequistes are not manadatory, but having a basic understanding helps a lot in understanding this tutorial.
+
+By the end of the notebook, you will be able to:
 
 1.  Prepare a dataset for training a neural network;
 2.  Generate and augment data to balance the dataset; and
@@ -11,10 +13,10 @@ In order to work through this notebook, we expect you'll have a basic understand
 ## prerequisites
 Note that if you are using conda environment, remember to install pip inside conda. Type conda install pip after you activate an environment. This step will save you from lot of problems.
 
-1. [Anaconda](https://www.continuum.io/downloads)
-2. OpenCV - pip install opencv-python. You can also build from source. (Note: conda install opencv3.0 does not work.)
-3. [scikit learn] (http://scikit-learn.org/stable/install.html).
-4. [MXNet](http://mxnet.io/get_started/install.html)
+1. [Anaconda](https://www.continuum.io/downloads). This is packet manager. Helps to install dependent python libraries with easy
+2. OpenCV - A computer vision library. We will use this to process our image. pip install opencv-python. You can also build from source. (Note: conda install opencv3.0 does not work.)
+3. [scikit learn] (http://scikit-learn.org/stable/install.html). A general purpose scientist computing library. We will use this preprocess our data.
+4. [MXNet](http://mxnet.io/get_started/install.html) . A deep learning library, the whole point of this tutorial
 5. Jupyter notebook - conda install jupyter notebook
 
 Mxnet, GPU version has a problem in windows. I have asked for clarification in [mxnet github](https://github.com/dmlc/mxnet/issues/6057) page. Mxnet CPU version works fine in windows.

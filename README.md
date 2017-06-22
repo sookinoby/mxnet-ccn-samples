@@ -15,7 +15,7 @@ Note that if you are using conda environment, remember to install pip inside con
 
 1. [Anaconda](https://www.continuum.io/downloads). This is packet manager. Helps to install dependent python libraries with easy
 2. OpenCV - A computer vision library. We will use this to process our image. pip install opencv-python. You can also build from source. (Note: conda install opencv3.0 does not work.)
-3. [scikit learn] (http://scikit-learn.org/stable/install.html). A general purpose scientist computing library. We will use this preprocess our data.
+3. [scikit learn](http://scikit-learn.org/stable/install.html). A general purpose scientist computing library. We will use this preprocess our data.
 4. [MXNet](http://mxnet.io/get_started/install.html) . A deep learning library, the whole point of this tutorial
 5. Jupyter notebook - conda install jupyter notebook
 

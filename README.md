@@ -10,7 +10,7 @@ By the end of the notebook, you will be able to:
 2.  Generate and augment data to balance the dataset; and
 3.  Implement custom neural network architecture for a multiclass classification problem.
 
-## Prerequisites
+## Preparing your environment
 Note that if you are using a conda environment, remember to install pip inside conda. Type conda install pip after you activate an environment. This step will save you from lot of problems.
 
 Here's how to get set up: **NOTE FROM CT: This list of instructions needs to be fleshed out to be sentences: "First, get Anaconda here" and so on.**

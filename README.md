@@ -18,15 +18,15 @@ Here's how to get set up: **NOTE FROM CT: This list of instructions needs to be 
 1. First, get [Anaconda](https://www.continuum.io/downloads), a package manager. Helps to install dependent python libraries with ease.
 2. Next, get the OpenCV-python library. This is a powerful computer vision library. We will use this to process our image. To install OpenCV inside anaconda environment, use 'pip install opencv-python'. You can also build from source. (Note: conda install opencv3.0 does not work.)
 3. Next, get the [scikit learn](http://scikit-learn.org/stable/install.html) library. A general purpose scientific computing library. We will use this preprocess our data. You can install with 'conda install scikit-learn'
-4 Next, get the Jupyter notebook. To install jupyter inside anaconda environment use 'conda install jupyter notebook'
-5 Next, get [MXNet](http://mxnet.io/get_started/install.html), a open source deep learning library, the whole point of this tutorial
+4. Next, get the Jupyter notebook. To install jupyter inside anaconda environment use 'conda install jupyter notebook'
+5. Next, get [MXNet](http://mxnet.io/get_started/install.html), a open source deep learning library, the whole point of this tutorial
 
 
 Here's are the commands you need to type inside the anaconda environment (after activation of the environment)
-1.conda install pip 
-2.pip install opencv-python
-3.conda install scikit-learn
-4.conda install jupyter notebook
+1. conda install pip 
+2. pip install opencv-python
+3. conda install scikit-learn
+4. conda install jupyter notebook
 
 Next you can install mxnet [MXNet](http://mxnet.io/get_started/install.html). 'conda install pip' is important and should be the first command inside the environment. This can save you from lot of problems.
 

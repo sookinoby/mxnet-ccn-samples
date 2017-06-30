@@ -368,9 +368,9 @@ mod.set_params(arg_params, aux_params)
 ```
 
 ## Prediction
-We are using the load model for prediction. We convert a traffic sign image (turn-left-ahead2.jpg) into 32*32*3 (32*32 dimension image with 3 channels) and try to predict their label. Here's is the image I downloaded from Google.
+We are using the load model for prediction. We convert a traffic sign image (Stop.jpg) into 32*32*3 (32*32 dimension image with 3 channels) and try to predict their label. Here's is the image I downloaded from Google.
 
-![Alt text](images/turn-left-ahead2.jpg?raw=true "test image")
+![Alt text](images/Stop.jpg?raw=true "test image")
 
 
 ```python
@@ -408,7 +408,7 @@ def predict(url):
     for i in prob[0:5]:
         print('class=%s' %(traffic_labels_dict[i]))
 
-predict('traffic-data/turn-left-ahead2.jpg',)
+predict('traffic-data/Stop.jpg',)
 ```
 
 ## Conclusion

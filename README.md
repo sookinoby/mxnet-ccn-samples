@@ -11,6 +11,8 @@ By the end of the notebook, you will be able to:
 3.  Implement custom neural network architecture for a multiclass classification problem.
 
 ## Preparing your environment
+If you're working in the AWS Cloud, you can save yourself the installation management by using an AMI [Amazon Machine Image](https://aws.amazon.com/marketplace/pp/B01M0AXXQB#support) preconfigured for deep learning.
+
 Note that if you are using a conda environment, remember to install pip inside conda. Type conda install pip after you activate an environment. This step will save you from lot of problems.
 
 Here's how to get set up: 

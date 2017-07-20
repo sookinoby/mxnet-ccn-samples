@@ -239,7 +239,7 @@ mynet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 ## Tweaking training data
 A neural network takes a lot of time and memory to train. In order to train neural network efficiently, we split a dataset into batches that fit into memory easily, so we split into batches of 64.
 
-Also, we train to normalize the value of the image colour (0-255) to the range of 0 to 1. This helps the learning algorithm to converge faster. You can read about the reasons to normalise the input online
+Also, we train to normalize the value of the image colour (0-255) to the range of 0 to 1. This helps the learning algorithm to converge faster. You can read about the [reasons to normalise the input](http://deeplearning.stanford.edu/wiki/index.php/Data_Preprocessing#Data_Normalization).
 
 Here's the code to normalize the value of the image color: 
 ```python

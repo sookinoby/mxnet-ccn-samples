@@ -137,90 +137,23 @@ plot_images(selected_image,row=10,col=4,idx=idx,y_val=y_train)
 Here are the visualized traffic signs, with their labels:
 ![Alt text](images/vis.png?raw=true "traffic sign visualization")
 
-## The data augmentation
-```
-When we explore the dataset with code shown below, we find a problem:
 
-```python
-#count the number of data associated with each label. We can the data is not evenly distributed across the label
-print(np.bincount(y_train))
-```
+## Preparing the dataset
 
-```python
-[ 210 2220 2250 1410 1980 1860  420 1440 1410 1470 2010 1320 2100 2160  780
-  630  420 1110 1200  210  360  330  390  510  270 1500  600  240  540  270
-  450  780  240  689  420 1200  390  210 2070  300  360  240  240]
-```
-
-As you might have noticed, there's unequal representation of the images in the training set. The number of images of the class label 0 ('speed limit 20 km/h)' is 210, and the number of images of the class label 1 ('speed limit 30 km/h)' is 2220. The classes cause the neural network to favour class label 1, as compared to class label 0.
-
-In order to balance the dataset, we need to generate additional augmented data. We can augment data with various parameters, but for the sake of simplicity, we are going to translate (move the image by random value in x, y dimensions) the image. Here is the code for data augmentation:
-```python
-def random_trans(image, trans_range):
-    rows,cols,_ = image.shape;
-    tr_x = trans_range * np.random.uniform() - trans_range / 2
-    tr_y = trans_range * np.random.uniform() - trans_range / 2
-    Trans_M = np.float32([[1, 0, tr_x], [0, 1, tr_y]])
-    image_tr = cv2.warpAffine(image, Trans_M, (cols, rows))
-    return image_tr
-```
-The line Trans_M = np.float32([[1, 0, tr_x], [0, 1, tr_y]]) forms the translation matrix, which is used to translate the image.
-
-Here's the code for balancing the dataset:
-
-```python
-# Code for balancing dataset
-def get_additional(count, label, X_train, y_train):
-    selected = np.where(y_train == label)[0]
-    counter = 0;
-    m = 0;
-    # just select the first element in selected labels
-    X_mqp = X_train[selected[0]]
-    X_mqp = X_mqp[np.newaxis, ...]
-    while m < (len(selected)):
-        aa =  random_trans(X_train[selected[m]],20)
-        # ignore the first element, since it already selected
-        X_mqp = np.vstack([X_mqp, aa[np.newaxis, ...]])
-        if (counter >= count):
-            break
-        if (m == (len(selected) - 1)):
-            m = 0
-        counter = counter + 1
-        m = m + 1
-    Y_mqp = np.full((len(X_mqp)), label, dtype='uint8')
-
-    return X_mqp, Y_mqp
-
-def balance_dataset(X_train_extra, Y_train_extra):
-    hist = np.bincount(y_train)
-    max_count = np.max(hist)
-    for i in range(len(hist)):
-        X_mqp, Y_mqp = get_additional(max_count - hist[i], i, X_train, y_train)
-        X_train_extra = np.vstack([X_train_extra, X_mqp])
-        Y_train_extra = np.append(Y_train_extra, Y_mqp)
-        
-    return X_train_extra,Y_train_extra
-
-X_train_extra,Y_train_extra =X_balance_dataset(X_train,y_train)
-print(Y_train_extra.shape)
-print(X_train_extra.shape)
-```
-## Prepared dataset
-
-X_train_extra and Y_train_extra make the actual training dataset. We'll employ real images for the purpose of testing. 
+X_train and Y_train make the actual training dataset. We'll employ real images for the purpose of testing. 
 
 You can also generate a validation set by splitting the training data into train and validation set. Here's the Python code for that:
 
 ```
 #split the train-set as validation and test set
 from sklearn.model_selection import train_test_split
-X_train_set,X_validation_set,Y_train_set,Y_validation_set = train_test_split( X_train_extra, Y_train_extra, test_size=0.02, random_state=42)
+X_train_set,X_validation_set,Y_train_set,Y_validation_set = train_test_split( X_train, Y_train, test_size=0.02, random_state=42)
 ```
 The image dimesioning order of mxnet is similar to theano and uses the format 3X32X32. The number of channels is the first dimension, followed by height and width of the image. Tensor flow uses image dimension ordering of 32X32X3, i.e the color channels comes last. Refer [this](https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean) for more information. Below is the helper function to convert image ordering to mxnet format to 3X32X32 from 32X32X3:
 
 ```python
 #change the image dimensioning from 32 X 32 X 3 to 3 X 32 X 32 for train
-X_train_reshape = np.transpose(X_train_extra, (0, 3, 1, 2))
+X_train_reshape = np.transpose(X_train, (0, 3, 1, 2))
 plt.imshow(X_train_reshape[0].transpose((1,2,0)))
 print(X_train_reshape.shape)
 
@@ -327,7 +260,7 @@ print("train set : ", X_train_set_norm.shape)
 print("validation set : ", X_validation_set_norm.shape)
 
 
-print("y train set : ", y_train_extra.shape)
+print("y train set : ", y_train.shape)
 print("y validation set :", y_valid.shape)
 ```
 

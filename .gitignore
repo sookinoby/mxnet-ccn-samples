@@ -3,5 +3,6 @@ traffic-signs-data
 handwritten-digits
 .idea
 test.py
-models
+models/*
 traffic-data
+!model/.gitkeep

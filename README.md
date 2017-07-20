@@ -231,32 +231,41 @@ plt.imshow(X_valid_reshape[1].transpose((1,2,0)))
 print(X_valid_reshape.shape)
 ```
 
-## The actual training
+## Building the deepnet
 
-Now, enough of preparing our dataset. Let's actually code the neural network up. The neural code is actually small and simple, thanks to MXNet symbol API:
+Now, enough of preparing our dataset. Let's actually code the neural network up. You'll note that there are some commented-out lines; I've left these in as artifacts from the development process—building a successful deep learning model is all about iteration and experimentation to find what works best. 
+
+The neural code is actually small and simple, thanks to MXNet symbol API:
 
 ```python
 data = mx.symbol.Variable('data')
 conv1 = mx.sym.Convolution(data=data, pad=(1,1), kernel=(3,3), num_filter=24, name="conv1")
 relu1 = mx.sym.Activation(data=conv1, act_type="relu", name= "relu1")
-#pool1 = mx.sym.Pooling(data=relu1, pool_type="max", kernel=(2,2), stride=(2,2),name="max_pool1")
+pool1 = mx.sym.Pooling(data=relu1, pool_type="max", kernel=(2,2), stride=(2,2),name="max_pool1")
 # second conv layer
-conv2 = mx.sym.Convolution(data=relu1, kernel=(3,3), num_filter=24, name="conv2", pad=(1,1))
+conv2 = mx.sym.Convolution(data=pool1, kernel=(3,3), num_filter=48, name="conv2", pad=(1,1))
 relu2 = mx.sym.Activation(data=conv2, act_type="relu", name="relu2")
 pool2 = mx.sym.Pooling(data=relu2, pool_type="max", kernel=(2,2), stride=(2,2),name="max_pool2")
-#
-#conv3 = mx.sym.Convolution(data=pool2, kernel=(5,5), num_filter=64, name="conv3")
-#relu3 = mx.sym.Activation(data=conv3, act_type="relu", name="relu3")
-#pool3 = mx.sym.Pooling(data=relu3, pool_type="max", kernel=(2,2), stride=(2,2),name="max_pool3")
+
+conv3 = mx.sym.Convolution(data=pool2, kernel=(5,5), num_filter=64, name="conv3")
+relu3 = mx.sym.Activation(data=conv3, act_type="relu", name="relu3")
+pool3 = mx.sym.Pooling(data=relu3, pool_type="max", kernel=(2,2), stride=(2,2),name="max_pool3")
+
+#conv4 = mx.sym.Convolution(data=conv3, kernel=(5,5), num_filter=64, name="conv3")
+#relu4 = mx.sym.Activation(data=conv4, act_type="relu", name="relu3")
+#pool4 = mx.sym.Pooling(data=relu4, pool_type="max", kernel=(2,2), stride=(2,2),name="max_pool3")
+
 # first fullc layer
-flatten = mx.sym.Flatten(data=pool2)
+flatten = mx.sym.Flatten(data=pool3)
 fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=500, name="fc1")
 relu3 = mx.sym.Activation(data=fc1, act_type="relu" , name="relu3")
 # second fullc
 fc2 = mx.sym.FullyConnected(data=relu3, num_hidden=43,name="final_fc")
 # softmax loss
 mynet = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
+
 ```
+
 
 Let's break the code a bit:
 ```python 

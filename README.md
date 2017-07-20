@@ -216,7 +216,7 @@ You can also generate a validation set by splitting the training data into train
 from sklearn.model_selection import train_test_split
 X_train_set,X_validation_set,Y_train_set,Y_validation_set = train_test_split( X_train_extra, Y_train_extra, test_size=0.02, random_state=42)
 ```
-The image dimesioning order of mxnet is similar to theano and uses the format 3*32*32. The number of channels is the first dimension, followed by height and width of the image. Tensor flow uses image dimension ordering of 32*32*3, i.e the color channels comes last. Refer [this](https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean) for more information. Below is the helper function to convert image ordering to mxnet format to 3*32*32 from 32*32*3:
+The image dimesioning order of mxnet is similar to theano and uses the format 3X32X32. The number of channels is the first dimension, followed by height and width of the image. Tensor flow uses image dimension ordering of 32X32X3, i.e the color channels comes last. Refer [this](https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean) for more information. Below is the helper function to convert image ordering to mxnet format to 3X32X32 from 32X32X3:
 
 ```python
 #change the image dimensioning from 32 X 32 X 3 to 3 X 32 X 32 for train

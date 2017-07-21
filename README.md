@@ -1,6 +1,8 @@
 # Classifying traffic signs with MXNet: An introduction to customizing a neural network
 
-Although there are many deep learning frameworks, including TensorFlow, Keras, Torch, and Caffee, MXNet in particular is gaining popularity due to its scalability across multiple GPUs. In this notebook, we classify German traffic signs using convolution neural network, which employs MXNet. The neural network takes a colored traffic sign image as input, and tries to identify the meaning of the traffic sign.
+Although there are many deep learning frameworks, including TensorFlow, Keras, Torch, and Caffe, MXNet in particular is gaining popularity due to its scalability across multiple GPUs. In this blog post, we'll tackle a computer vision problem: classifying German traffic signs using a convolutional neural network. The  network takes a color photo containing a traffic sign image as input, and tries to identify the type of sign.
+
+The full notebook is located at [https://github.com/manujeevanprakash/mxnet-ccn-samples/blob/master/Cnn-mxnet.ipynb](https://github.com/manujeevanprakash/mxnet-ccn-samples/blob/master/Cnn-mxnet.ipynb)
 
 In order to work through this notebook, we expect you'll have a very basic understanding of convolution operation, neural network, activation units, gradient decent, NumPy, and OpenCV. The prerequistes are not manadatory, but having a basic understanding helps a lot in understanding this tutorial.
 

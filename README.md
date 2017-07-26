@@ -2,14 +2,14 @@
 
 Although there are many deep learning frameworks, including TensorFlow, Keras, Torch, and Caffe, MXNet in particular is gaining popularity due to its scalability across multiple GPUs. In this blog post, we'll tackle a computer vision problem: classifying German traffic signs using a convolutional neural network. The network takes a color photo containing a traffic sign image as input, and tries to identify the type of sign.
 
-The full notebook is located at [https://github.com/manujeevanprakash/mxnet-ccn-samples/blob/master/Cnn-mxnet.ipynb](https://github.com/manujeevanprakash/mxnet-ccn-samples/blob/master/Cnn-mxnet.ipynb)
+The full notebook can be found [here](https://github.com/manujeevanprakash/mxnet-ccn-samples/blob/master/Cnn-mxnet.ipynb)
 
 In order to work through this notebook, we expect you'll have a very basic understanding of neural network, convolution, activation units, gradient descent, NumPy, and OpenCV. These prerequisites are not mandatory, but having a basic understanding will help.
 
 By the end of the notebook, you will be able to:
 
-1.  Prepare a dataset for training a neural network;
-2.  Generate and augment data to balance the dataset; and
+1.  Prepare a data set for training a neural network;
+2.  Generate and augment data to balance the data set; and
 3.  Implement a custom neural network architecture for a multiclass classification problem.
 
 ## Preparing your environment
@@ -20,10 +20,10 @@ Note that if you are using a conda environment, remember to install pip inside c
 Here's how to get set up: 
 
 1. First, get [Anaconda](https://www.continuum.io/downloads), a package manager. It will help you to install dependent Python libraries with ease.
-2. Install the OpenCV-python library, a powerful computer vision library. We will use this to process our images. To install OpenCV inside the Anaconda environment, use 'pip install opencv-python'. You can also build from source. (Note: conda install opencv3.0 does not work.)
-3. Next, install [scikit learn](http://scikit-learn.org/stable/install.html), a general-purpose scientific computing library. We'll use this to preprocess our data. You can install it with 'conda install scikit-learn'.
-4. Then grab the Jupyter notebook, with 'conda install jupyter notebook'.
-5. And finally, get [MXNet](http://mxnet.io/get_started/install.html), a open source deep learning library.
+2. Install the OpenCV-python library, a powerful computer vision library. We will use this to process our image. To install OpenCV inside the Anaconda environment, use 'pip install opencv-python'. You can also build from source. (Note: conda install opencv3.0 does not work.)
+3. Next, install [scikit learn](http://scikit-learn.org/stable/install.html), a general-purpose scientific computing library. We'll use this preprocess our data. You can install it with 'conda install scikit-learn'.
+4. Then grab the Jupyter Notebook, with 'conda install jupyter notebook'.
+5. And finally, get [MXNet](http://mxnet.io/get_started/install.html), an open source deep learning library.
 
 Here are the commands you need to type inside the anaconda environment (after activation of the environment):
 1. conda install pip 
@@ -35,12 +35,12 @@ Here are the commands you need to type inside the anaconda environment (after ac
  
 
 
-## The dataset
-In order to learn about any deep neural network, we need data. For this notebook, we use a dataset already stored as a NumPy array. You can also load data from any image file. We'll show that process later in the notebook.
+## The data set
+In order to learn about any deep neural network, we need data. For this notebook, we use a data set already stored as a NumPy array. You can also load data from any image file. We'll show that process later in the notebook.
 
-The dataset we'll use is the [German Traffic Sign Recognition Benchmark](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset) (J. Stallkamp, M. Schlipsing, J. Salmen, and C. Igel. "The German Traffic Sign Recognition Benchmark: A multi-class classification competition." In _Proceedings of the IEEE International Joint Conference on Neural Networks_, pages 1453–1460. 2011.). 
+The data set we'll use is the [German Traffic Sign Recognition Benchmark](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset) (J. Stallkamp, M. Schlipsing, J. Salmen, and C. Igel. "The German Traffic Sign Recognition Benchmark: A multi-class classification competition." In _Proceedings of the IEEE International Joint Conference on Neural Networks_, pages 1453–1460. 2011.). 
 
-The dataset consists of 39,209 training samples and 12,630 testing samples, representing 43 different traffic signs—stop signs, speed limits, various warning signs, and so on).
+This data set consists of 39,209 training samples and 12,630 testing samples, representing 43 different traffic signs—stop signs, speed limits, various warning signs, and so on).
 
 We'll use a [pickled](https://en.wikipedia.org/wiki/Serialization#Pickle) version of the data, [training.p](https://github.com/manujeevanprakash/mxnet-ccn-samples/blob/master/traffic-data/training.p) and [valid.p](https://github.com/manujeevanprakash/mxnet-ccn-samples/blob/master/traffic-data/valid.p). 
 
@@ -64,11 +64,11 @@ with open(validation_file, mode='rb') as f:
 X_train, y_train = train['features'], train['labels']
 X_valid, y_valid = valid['features'], valid['labels']
 ```
-We are loading the data from a stored NumPy array. In this array, the data is split between training, validation, and test sets. The training set contains the features of 39209 images of size 32 X 32 with 3 (R,G,B) channels. As a result, the NumPy array dimension is  39209 * 32 X 32 X 3 array. We will only be using the training set and validation set in this notebook. We will use real images from the internet to test our model.
+We are loading the data from a stored NumPy array. In this array, the data is split between training, validation, and test sets. The training set contains the features of 39,209 images of size 32 X 32 with 3 (R,G,B) channels. As a result, the NumPy array dimension is  39,209 X 32 X 32 X 3. We will only be using the training set and validation set in this notebook. We will use real images from the internet to test our model.
 
-So X_train is of dimension 39209 * 32 X 32 X 3. The y_train is of dimension 39209 and contains an integer between 0 and 43 for each image.
+So X_train is of dimension 39,209 * 32 X 32 X 3. The y_train is of dimesion 39,209 and contains a number between 0-43 for each image.
 
-Next, we load the file that maps each image class id to natural-language names:
+Next, we load the file that maps each image class ID to natural-language names:
 ```python
 # The actual name of the classes are given in a separate file. Here we load the csv file which allows mapping from classes/labels to 
 # file name
@@ -138,9 +138,9 @@ Here are the visualized traffic signs, with their labels:
 ![Alt text](images/vis.png?raw=true "traffic sign visualization")
 
 
-## Preparing the dataset
+## Preparing the data set
 
-X_train and Y_train make the training dataset. We'll employ real images for the purpose of testing. 
+X_train and Y_train make the training data set. We'll employ real images for the purpose of testing. 
 
 You could also generate a validation set by splitting the training data into train and validation sets using scikit-learn (this is how you avoid testing your model on images that it's already seen). Here's the Python code for that:
 
@@ -149,7 +149,7 @@ You could also generate a validation set by splitting the training data into tra
 from sklearn.model_selection import train_test_split
 X_train_set,X_validation_set,Y_train_set,Y_validation_set = train_test_split( X_train, Y_train, test_size=0.02, random_state=42)
 ```
-The image dimension order of mxnet is similar to Theano and uses the format 3X32X32. The number of channels is the first dimension, followed by height and width of the image. TensorFlow uses image dimension ordering of 32X32X3, i.e the color channels come last. If you're switching from TensorFlow to MXNet [this discussion of dimension ordering](https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean) may be helpful. Below is the helper function to convert image ordering to MXNet's 3X32X32 format from 32X32X3:
+The image dimension order of MXNet is similar to Theano and uses the format 3X32X32. The number of channels is the first dimension, followed by height and width of the image. TensorFlow uses image dimension ordering of 32X32X3, i.e the color channels come last. If you're switching from TensorFlow to MXNet [this discussion of dimension ordering](https://datascience.stackexchange.com/questions/14467/what-does-theano-dimension-ordering-mean) may be helpful. Below is the helper function to convert image ordering to MXNet's 3X32X32 format from 32X32X3:
 
 ```python
 #change the image dimensioning from 32 X 32 X 3 to 3 X 32 X 32 for train
@@ -166,7 +166,7 @@ print(X_valid_reshape.shape)
 
 ## Building the deepnet
 
-Now, enough of preparing our dataset. Let's actually code the neural network up. You'll note that there are some commented-out lines; I've left these in as artifacts from the development process—building a successful deep learning model is all about iteration and experimentation to find what works best. Building neural networks is something of a black art at this point in history; while you might experiment to solve your particular problem, for a well-explored issue like image recognition, you'll do best to implement a published architecture with proven performance. Here, we'll build up a simplified version of the [AlexNet](https://en.wikipedia.org/wiki/AlexNet) architecture, which is based on convolutional neural networks.. 
+Now, enough of preparing our data set. Let's actually code up the neural network. You'll note that there are some commented-out lines; I've left these in as artifacts from the development process—building a successful deep learning model is all about iteration and experimentation to find what works best. Building neural networks is something of a black art at this point in history; while you might experiment to solve your particular problem, for a well-explored issue like image recognition, you'll do best to implement a published architecture with proven performance. Here, we'll build up a simplified version of the [AlexNet](https://en.wikipedia.org/wiki/AlexNet) architecture, which is based on convolutional neural networks.. 
 
 The neural code is concise and simple, thanks to MXNet's symbolic API:
 
@@ -266,7 +266,7 @@ print("y validation set :", y_valid.shape)
 ```
 
 ## Training the network
-We are training the network using GPUs, since it's faster. A single pass-through of the training set is referred to as one epoch, and we are training the network for 10 epochs "num_epoch = 10". We also periodically store the trained model in a JSON file, and measure the train and validation accuracy to see our neural network 'learn.' 
+We are training the network using GPUs, since it's faster. A single pass-through of the training set is referred to as one "epoch," and we are training the network for 10 epochs "num_epoch = 10". We also periodically store the trained model in a JSON file, and measure the train and validation accuracy to see our neural network 'learn.' 
 
 Here is the code: 
 ```python
